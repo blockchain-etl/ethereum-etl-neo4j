@@ -3,7 +3,7 @@ SELECT
     nonce,
     transaction_index,
     from_address,
-    to_address,
+    COALESCE(to_address, receipt_contract_address) AS to_address,
     value,
     gas,
     gas_price,

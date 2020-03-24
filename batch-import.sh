@@ -14,12 +14,12 @@ TEMP_BQ_DATASET=ethereum_etl_neo4j_temp
 TEMP_GCS_BUCKET=ethereum_etl_neo4j_temp_$PROJECT
 
 function create_temp_resources {
-    bq mk ${TEMP_BQ_DATASET}
+    bq mk ${TEMP_BQ_DATASET} || true
 
     LOCATION=us-central1
 
     echo "Creating bucket..."
-    gsutil mb -p $PROJECT -c regional -l $LOCATION gs://${TEMP_GCS_BUCKET}/
+    gsutil mb -p $PROJECT -c regional -l $LOCATION gs://${TEMP_GCS_BUCKET}/ || true
 }
 
 function create_tables {
@@ -55,6 +55,7 @@ function export_tables {
 }
 
 function download_datasets {
+    sudo rm -rf /tmp/datasets
     mkdir /tmp/datasets
     gsutil -m cp -r "gs://${TEMP_GCS_BUCKET}/batch_import/*" /tmp/datasets
     sudo chown -R neo4j:adm /tmp/datasets
@@ -73,9 +74,9 @@ function run_import {
     sudo -u neo4j neo4j-admin import \
         --database ethereum.db \
         --report-file /tmp/import-report.txt \
-        --nodes:Address "headers/addresses.csv,addresses/addresses-.*" \
-        --nodes:Block "headers/blocks.csv,blocks/blocks-.*" \
-        --relationships:transaction "headers/transactions.csv,transactions/transactions-.*"
+        --nodes:Address "headers/addresses.csv,${IMPORT_FOLDER}/addresses/addresses-.*" \
+        --nodes:Block "headers/blocks.csv,${IMPORT_FOLDER}/blocks/blocks-.*" \
+        --relationships:transaction "headers/transactions.csv,${IMPORT_FOLDER}/transactions/transactions-.*"
 }
 
 create_temp_resources
