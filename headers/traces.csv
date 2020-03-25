@@ -1,1 +1,1 @@
-trace_id:ID(TRACE),transaction_hash,transaction_index,:START_ID(Address),:END_ID(Address),value,trace_type,call_type,reward_type,gas,gas_used,subtraces:int,trace_address,error,status:int,block_timestamp:datetime,block_number
+trace_id,transaction_hash,transaction_index,:START_ID(Address),:END_ID(Address),value,trace_type,call_type,reward_type,gas,gas_used,subtraces:int,trace_address,error,status:int,block_timestamp:datetime,block_number

@@ -29,6 +29,7 @@ cd ethereum-etl-neo4j
 
 ```bash
 nohup bash batch-import.sh &
+tail -f nohup.out
 ```
 
 4. Open the Neo4j console at https://<vm_external_ip>:7473/browser/ and execute the query:

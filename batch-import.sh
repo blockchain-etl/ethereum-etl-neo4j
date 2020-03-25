@@ -17,7 +17,7 @@ QUERY_START_DATE=${START_DATE:-1970-01-01}
 QUERY_END_DATE=${END_DATE:-2020-03-24}
 
 function create_temp_resources {
-    bq mk ${TEMP_BQ_DATASET} || true
+    bq mk ${TEMP_BQ_DATASET} --project_id "$PROJECT" || true
 
     LOCATION=us-central1
 
@@ -32,6 +32,7 @@ function create_tables {
 
         echo "  Creating aux table $TABLE"
         bq --location=US query \
+            --project_id "$PROJECT"
             --destination_table "$PROJECT:$TEMP_BQ_DATASET.$TABLE" \
             --replace \
             --use_legacy_sql=false \
