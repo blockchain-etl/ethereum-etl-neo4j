@@ -1,1 +1,1 @@
-hash,nonce,transaction_index:int,:START_ID(Address-ID),:END_ID(Address-ID),value,gas,gas_price,receipt_cumulative_gas_used,receipt_gas_used,receipt_contract_address,receipt_root,receipt_status,block_timestamp:datetime,block_number,block_hash
+hash:ID(TRANSACTION),nonce,transaction_index:int,:START_ID(Address),:END_ID(Address),value,gas,gas_price,receipt_cumulative_gas_used,receipt_gas_used,receipt_contract_address,receipt_root,receipt_status,block_timestamp:datetime,block_number

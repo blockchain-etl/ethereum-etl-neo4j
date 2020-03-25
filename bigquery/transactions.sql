@@ -13,7 +13,6 @@ SELECT
     receipt_root,
     receipt_status,
     FORMAT_TIMESTAMP("%Y-%m-%dT%X%Ez", block_timestamp) AS block_timestamp,
-    block_number,
-    block_hash
+    block_number
 FROM `bigquery-public-data.crypto_ethereum.transactions`
-WHERE DATE(block_timestamp) < '2020-03-22'
+WHERE DATE(block_timestamp) >= @start_date AND DATE(block_timestamp) <= @end_date

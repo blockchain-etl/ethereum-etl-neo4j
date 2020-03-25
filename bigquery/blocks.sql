@@ -1,5 +1,5 @@
 SELECT
-    FORMAT_TIMESTAMP("%Y-%m-%dT%X%Ez", blocks.timestamp) AS timestamp,
+    FORMAT_TIMESTAMP("%Y-%m-%dT%X%Ez", timestamp) AS timestamp,
     number,
     `hash`,
     parent_hash,
@@ -17,5 +17,5 @@ SELECT
     gas_limit,
     gas_used,
     transaction_count
-FROM `bigquery-public-data.crypto_ethereum.blocks` as blocks
-WHERE DATE(blocks.timestamp) < '2020-03-22'
+FROM `bigquery-public-data.crypto_ethereum.blocks`
+WHERE DATE(timestamp) >= @start_date AND DATE(timestamp) <= @end_date

@@ -13,6 +13,9 @@ IMPORT_FOLDER=/var/lib/neo4j/import
 TEMP_BQ_DATASET=ethereum_etl_neo4j_temp
 TEMP_GCS_BUCKET=ethereum_etl_neo4j_temp_$PROJECT
 
+QUERY_START_DATE=${START_DATE:-1970-01-01}
+QUERY_END_DATE=${END_DATE:-2020-03-24}
+
 function create_temp_resources {
     bq mk ${TEMP_BQ_DATASET} || true
 
@@ -33,6 +36,8 @@ function create_tables {
             --replace \
             --use_legacy_sql=false \
             --format none \
+            --parameter=start_date::${QUERY_START_DATE} \
+            --parameter=end_date::${QUERY_END_DATE} \
             "$QUERY"
     done
 }
@@ -70,13 +75,15 @@ function download_datasets {
 
 
 function run_import {
-    sudo -u neo4j rm -rf /var/lib/neo4j/data/databases/ethereum.db
+    sudo -u neo4j rm -rf /var/lib/neo4j/data/databases/graph.db
     sudo -u neo4j neo4j-admin import \
-        --database ethereum.db \
+        --database graph.db \
         --report-file /tmp/import-report.txt \
         --nodes:Address "headers/addresses.csv,${IMPORT_FOLDER}/addresses/addresses-.*" \
         --nodes:Block "headers/blocks.csv,${IMPORT_FOLDER}/blocks/blocks-.*" \
-        --relationships:transaction "headers/transactions.csv,${IMPORT_FOLDER}/transactions/transactions-.*"
+        --relationships:TRANSACTION "headers/transactions.csv,${IMPORT_FOLDER}/transactions/transactions-.*" \
+        --relationships:TRACE "headers/traces.csv,${IMPORT_FOLDER}/transactions/traces-.*" \
+        --relationships:TOKEN_TRANSFER "headers/token_transfers.csv,${IMPORT_FOLDER}/token_transfers/token_transfers-.*"
 }
 
 create_temp_resources
