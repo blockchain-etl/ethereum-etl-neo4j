@@ -17,7 +17,7 @@ QUERY_START_DATE=${START_DATE:-1970-01-01}
 QUERY_END_DATE=${END_DATE:-2020-03-24}
 
 function create_temp_resources {
-    bq mk ${TEMP_BQ_DATASET} --project_id "$PROJECT" || true
+    bq --project_id "$PROJECT" mk ${TEMP_BQ_DATASET} || true
 
     LOCATION=us-central1
 
@@ -31,8 +31,7 @@ function create_tables {
         QUERY="$(cat $file | tr "\n" " ")"
 
         echo "  Creating aux table $TABLE"
-        bq --location=US query \
-            --project_id "$PROJECT"
+        bq --location=US --project_id "$PROJECT" query \
             --destination_table "$PROJECT:$TEMP_BQ_DATASET.$TABLE" \
             --replace \
             --use_legacy_sql=false \
@@ -49,7 +48,7 @@ function export_tables {
         FOLDER="gs://${TEMP_GCS_BUCKET}/batch_import/$TABLE"
         gsutil rm ${FOLDER}/** || true
         echo "  Exporting table $TABLE to bucket $FOLDER"
-        bq --location=US extract \
+        bq --location=US --project_id "$PROJECT" extract \
             --compression GZIP \
             --destination_format CSV \
             --field_delimiter , \
