@@ -82,7 +82,7 @@ function run_import {
         --nodes:Address "headers/addresses.csv,${IMPORT_FOLDER}/addresses/addresses-.*" \
         --nodes:Block "headers/blocks.csv,${IMPORT_FOLDER}/blocks/blocks-.*" \
         --relationships:TRANSACTION "headers/transactions.csv,${IMPORT_FOLDER}/transactions/transactions-.*" \
-        --relationships:TRACE "headers/traces.csv,${IMPORT_FOLDER}/transactions/traces-.*" \
+        --relationships:TRACE "headers/traces.csv,${IMPORT_FOLDER}/traces/traces-.*" \
         --relationships:TOKEN_TRANSFER "headers/token_transfers.csv,${IMPORT_FOLDER}/token_transfers/token_transfers-.*"
 }
 

@@ -3,7 +3,7 @@ SELECT
     transaction_hash,
     transaction_index,
     COALESCE(from_address, '0x0000000000000000000000000000000000000000') AS from_address,
-    to_address,
+    COALESCE(to_address, '0x0000000000000000000000000000000000000000') AS to_address,
     value,
     trace_type,
     call_type,
