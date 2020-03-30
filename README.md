@@ -9,7 +9,7 @@ gcloud compute instances create ethereum-neo4j-instance-0 \
     --image neo4j-enterprise-1-3-5-7-apoc \
     --image-project launcher-public \
     --machine-type n1-standard-2 \
-    --boot-disk-size 1500GB \
+    --boot-disk-size 2000GB \
     --tags neo4j \
     --zone us-central1-a \
     --boot-disk-type pd-ssd
@@ -39,13 +39,15 @@ tail -f nohup.out
 # Monitor the logs
 ```
 
-4. Restart neo4j:
+4. Create the indexes:
 
 ```bash
+
+nohup bash setup-indexes.sh &
 sudo systemctl restart neo4j
 ```
 
-4. Open the Neo4j console at https://<vm_external_ip>:7473/browser/ and run some queries:
+5. Open the Neo4j console at https://<vm_external_ip>:7473/browser/ and run some queries:
 
 ```bash
 MATCH (address: Address)
@@ -53,6 +55,13 @@ RETURN address
 LIMIT 10
 ```
 
+```bash
+MATCH (a1:Address { address_string: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045' })-[r]-(a2)
+RETURN *
+```
+
 Notes:
 - values are loaded with type string to Neo4j as there is only Integer and Float types there. Use exact math function
 in your queries to convert to BigInteger https://neo4j.com/docs/labs/apoc/current/mathematical/exact-math-functions/.
+- Neo4j doesn't allow native indexes for relations. Full-text indexes can be used as a workaround:
+https://github.com/neo4j/neo4j/issues/7225

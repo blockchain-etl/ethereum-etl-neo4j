@@ -1,0 +1,2 @@
+CREATE CONSTRAINT ON (b:Block) ASSERT b.number IS UNIQUE;
+CREATE CONSTRAINT ON (a:Address) ASSERT a.address_string IS UNIQUE;
